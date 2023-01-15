@@ -3,6 +3,7 @@ import nl.saxion.app.interaction.GameLoop;
 import nl.saxion.app.interaction.KeyboardEvent;
 import nl.saxion.app.interaction.MouseEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,8 +11,15 @@ import java.util.TimerTask;
 public class BasicGame implements GameLoop {
 
     public static void main(String[] args) {
-        SaxionApp.startGameLoop(new BasicGame(), 1000, 1000, 40);
+        //Used to identify any size of screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        SaxionApp.startGameLoop(new BasicGame(), screenWidth, screenHeight, 40);
     }
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = screenSize.width;
+    int screenHeight = screenSize.height;
     ArrayList<Asteroid> asteroids;
     ArrayList<Asteroid> asteroidsFromBottom;
     ArrayList<Asteroid> asteroidsFromLeft;
@@ -19,6 +27,8 @@ public class BasicGame implements GameLoop {
     boolean playerAlive = true;
     //asteroid spawn rate
     int spawnTimer = 2000;
+    //Number of lives
+    int lives = 5;
 
     @Override
     public void init() {
