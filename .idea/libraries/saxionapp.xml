@@ -4,6 +4,9 @@
       <root url="jar://$PROJECT_DIR$/Sandbox/resources/saxionapp.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/Sandbox/resources/saxionapp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Sandbox/resources/saxionapp.jar!/" />
+    </SOURCES>
   </library>
 </component>
