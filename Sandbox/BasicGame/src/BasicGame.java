@@ -83,7 +83,8 @@ public class BasicGame implements GameLoop {
         Asteroid asteroidCollision = asteroids.get(i);
             if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
             lives = lives - 1;
-             asteroids.remove(asteroidCollision);
+            SaxionApp.drawImage("Sandbox/BasicGame/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+            asteroids.remove(asteroidCollision);
         }
 
         //Deletes asteroids from top from array when they leave the screen bounds
