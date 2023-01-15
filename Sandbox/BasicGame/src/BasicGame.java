@@ -44,13 +44,14 @@ public class BasicGame implements GameLoop {
                 asteroidsFromRight = new ArrayList<>();
                 setAsteroids(playerAlive, spawnTimer);
             }
+
     }
 
     @Override
     public void loop() {
 
             SaxionApp.clear();
-            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, 1500, 1000);
+            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, 900, 580);
             // Draw Asteroids to move across screen
             for(Asteroid asteroid1 : asteroids){
                 SaxionApp.drawImage(asteroid1.filename, asteroid1.x, asteroid1.y, 100, 100);
@@ -71,6 +72,18 @@ public class BasicGame implements GameLoop {
                 SaxionApp.drawImage(asteroidR.filename, asteroidR.x, asteroidR.y, 100, 100);
                 asteroidR.x = asteroidR.x - 4;
                 asteroidR.y = asteroidR.y - 5;
+            }
+            if(spaceship.x >= 850){
+                spaceship.x=850;
+            }
+            if(spaceship.x <= 0){
+                spaceship.x=0;
+            }
+            if(spaceship.y >= 530){
+                spaceship.y=530;
+            }
+            if(spaceship.y <= 0){
+                spaceship.y=0;
             }
 
             // Move spaceship to the direction
