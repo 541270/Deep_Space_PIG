@@ -15,7 +15,7 @@ public class BasicGame implements GameLoop {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
         int screenHeight = screenSize.height;
-        SaxionApp.startGameLoop(new BasicGame(), screenWidth, screenHeight, 40);
+        SaxionApp.startGameLoop(new BasicGame(), screenWidth-50, screenHeight-100, 40);
     }
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int screenWidth = screenSize.width;
@@ -29,12 +29,13 @@ public class BasicGame implements GameLoop {
     int spawnTimer = 2000;
     //Number of lives
     int lives = 5;
+    int score = 0;
 
     @Override
     public void init() {
             //Sound and Start screen
             SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Destiny OST 26 Untold Legends.wav", true);
-            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/StartScreen.png", 0, 0, 900, 580);
+            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/GameMenu.png", 0, 0, screenWidth, screenHeight);
             SaxionApp.pause();
 
             asteroids = new ArrayList<Asteroid>();
@@ -46,31 +47,76 @@ public class BasicGame implements GameLoop {
 
     @Override
     public void loop() {
-
             SaxionApp.clear();
-            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, 1500, 1000);
+            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
+            SaxionApp.drawText("Lives: " + lives, 50,50,30);
             // Draw Asteroids to move across screen
             for(Asteroid asteroid1 : asteroids){
                 SaxionApp.drawImage(asteroid1.filename, asteroid1.x, asteroid1.y, 100, 100);
                 asteroid1.x = asteroid1.x + 2;
                 asteroid1.y = asteroid1.y + 4;
+                asteroid1.boundingBox.x = asteroid1.x;
+                asteroid1.boundingBox.y = asteroid1.y;
             }
             for(Asteroid asteroid2 : asteroidsFromBottom){
                 SaxionApp.drawImage(asteroid2.filename, asteroid2.x, asteroid2.y, 100, 100);
-                asteroid2.x = asteroid2.x + 2;
+                asteroid2.x = asteroid2.x - 2;
                 asteroid2.y = asteroid2.y - 4;
+                asteroid2.boundingBox.x = asteroid2.x;
+                asteroid2.boundingBox.y = asteroid2.y;
             }
             for(Asteroid asteroidL : asteroidsFromLeft){
                 SaxionApp.drawImage(asteroidL.filename, asteroidL.x, asteroidL.y, 100, 100);
                 asteroidL.x = asteroidL.x + 4;
                 asteroidL.y = asteroidL.y + 2;
+                asteroidL.boundingBox.x = asteroidL.x;
+                asteroidL.boundingBox.y = asteroidL.y;
             }
             for(Asteroid asteroidR : asteroidsFromRight){
                 SaxionApp.drawImage(asteroidR.filename, asteroidR.x, asteroidR.y, 100, 100);
                 asteroidR.x = asteroidR.x - 4;
-                asteroidR.y = asteroidR.y - 5;
+                asteroidR.boundingBox.x = asteroidR.x;
+                asteroidR.boundingBox.y = asteroidR.y;
             }
+        //Collision detection from asteroid to ship
+        for (int i = 0; i < asteroids.size(); i++) {
+        Asteroid asteroidCollision = asteroids.get(i);
+            if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
+            lives = lives - 1;
+             asteroids.remove(asteroidCollision);
+        }
+
+        //Deletes asteroids from top from array when they leave the screen bounds
+        for (int j = 0; j < asteroids.size(); j++) {
+            Asteroid asteroid = asteroids.get(j);
+            // change variables to adjust when asteroids get deleted from array
+            if (asteroid.x > screenWidth || asteroid.y > screenHeight) {
+                asteroids.remove(asteroid);
+            }
+        }
+        for (int k = 0; k < asteroids.size(); k++) {
+            Asteroid asteroid = asteroidsFromBottom.get(k);
+            // change variables to adjust when asteroids get deleted from array
+            if (asteroid.x < 0 || asteroid.y < 0) {
+                asteroids.remove(asteroid);
+            }
+        }
+        for (int y= 0; y < asteroids.size(); y++) {
+            Asteroid asteroid = asteroidsFromRight.get(y);
+            // change variables to adjust when asteroids get deleted from array
+            if (asteroid.x < screenWidth || asteroid.y < 0) {
+                asteroids.remove(asteroid);
+            }
+        }
+        for (int x = 0; x < asteroids.size(); x++) {
+            Asteroid asteroid = asteroidsFromLeft.get(x);
+            // change variables to adjust when asteroids get deleted from array
+            if (asteroid.x > screenWidth || asteroid.y > screenHeight || asteroid.y < 0) {
+                asteroids.remove(asteroid);
+            }
+        }
     }
+}
 
     @Override
     public void keyboardEvent(KeyboardEvent keyboardEvent) {
@@ -91,23 +137,27 @@ public class BasicGame implements GameLoop {
                     Asteroid asteroid = new Asteroid();
                     asteroid.x = SaxionApp.getRandomValueBetween(0, SaxionApp.getWidth());
                     asteroid.y = -50;
+                    asteroid.boundingBox = new Rectangle(asteroid.x + 5, asteroid.y + 5, 40, 40);
                     asteroids.add(asteroid);
                 }if(playerAlive){
                     Asteroid asteroidB = new Asteroid();
                     asteroidB.x = SaxionApp.getRandomValueBetween(0,SaxionApp.getWidth());
                     asteroidB.y = SaxionApp.getHeight()+50;
+                    asteroidB.boundingBox = new Rectangle(asteroidB.x + 5, asteroidB.y + 5, 40, 40);
                     asteroidsFromBottom.add(asteroidB);
                 }
                 if(playerAlive){
                     Asteroid asteroidL = new Asteroid();
                     asteroidL.x = -50;
                     asteroidL.y = SaxionApp.getRandomValueBetween(0, SaxionApp.getHeight());
+                    asteroidL.boundingBox = new Rectangle(asteroidL.x + 5, asteroidL.y + 5, 40, 40);
                     asteroidsFromLeft.add(asteroidL);
                 }
                 if(playerAlive){
                     Asteroid asteroidR = new Asteroid();
                     asteroidR.x = SaxionApp.getWidth()+50;
                     asteroidR.y = SaxionApp.getRandomValueBetween(0, SaxionApp.getHeight());
+                    asteroidR.boundingBox = new Rectangle(asteroidR.x + 5, asteroidR.y + 5, 40, 40);
                     asteroidsFromRight.add(asteroidR);
                 }
 
