@@ -78,6 +78,9 @@ public class BasicGame implements GameLoop {
                 asteroidR.boundingBox.x = asteroidR.x;
                 asteroidR.boundingBox.y = asteroidR.y;
             }
+
+
+
         //Collision detection from asteroid to ship
         for (int i = 0; i < asteroids.size(); i++) {
         Asteroid asteroidCollision = asteroids.get(i);
