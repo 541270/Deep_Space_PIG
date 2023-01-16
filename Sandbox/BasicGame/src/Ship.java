@@ -9,6 +9,6 @@ Rectangle boudingbox;
     double a;
     double move;
 
-
+    Rectangle boundingBox;
 }
 
