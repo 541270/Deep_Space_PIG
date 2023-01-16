@@ -22,6 +22,8 @@ public class BasicGame implements GameLoop {
     int screenWidth = screenSize.width;
     int screenHeight = screenSize.height;
     Ship spaceship;
+
+    ArrayList<Laser> shootLaser;
     ArrayList<Asteroid> asteroids;
     ArrayList<Asteroid> asteroidsFromBottom;
     ArrayList<Asteroid> asteroidsFromLeft;
@@ -55,6 +57,8 @@ public class BasicGame implements GameLoop {
                 asteroidsFromLeft = new ArrayList<Asteroid>();
                 asteroidsFromRight = new ArrayList<Asteroid>();
                 setAsteroids(playerAlive, spawnTimer);
+
+        shootLaser = new ArrayList<Laser>();
             }
 
 
@@ -106,51 +110,59 @@ public class BasicGame implements GameLoop {
             spaceship.y = 0;
         }
 
-        // Move spaceship to the direction
-        spaceship.x += Math.cos(Math.toRadians(spaceship.a)) * spaceship.move;
-        spaceship.y += Math.sin(Math.toRadians(spaceship.a)) * spaceship.move;
-        spaceship.boundingBox.x = spaceship.x + 5;
-        spaceship.boundingBox.y = spaceship.y + 5;
-        // Rotate spaceship
-        SaxionApp.transformRotate(spaceship.a, spaceship.x + 25, spaceship.y + 25);
-        //Draw spaceship
-        SaxionApp.drawImage(spaceship.imageFile, spaceship.x, spaceship.y, 50, 50);
-        // Stop the spaceship after one move
-        spaceship.move = 0;
+        for (Laser shoots : shootLaser) {
+            shoots.x += Math.cos(Math.toRadians(shoots.a)) * shoots.move;
+            shoots.y += Math.sin(Math.toRadians(shoots.a)) * shoots.move;
+            // Rotate laser with spaceship
+            SaxionApp.transformRotate(shoots.a, shoots.x + 25, shoots.y + 25);
+            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/bluelaser.png", shoots.x, shoots.y, 50, 50);
+        }
 
-        //Collision detection from asteroid to ship
-        for (int i = 0; i < asteroids.size(); i++) {
-            Asteroid asteroidCollision = asteroids.get(i);
-            if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
-                lives = lives - 1;
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
-                asteroids.remove(asteroidCollision);
+            // Move spaceship to the direction
+            spaceship.x += Math.cos(Math.toRadians(spaceship.a)) * spaceship.move;
+            spaceship.y += Math.sin(Math.toRadians(spaceship.a)) * spaceship.move;
+            spaceship.boundingBox.x = spaceship.x + 5;
+            spaceship.boundingBox.y = spaceship.y + 5;
+            // Rotate spaceship
+            SaxionApp.transformRotate(spaceship.a, spaceship.x + 25, spaceship.y + 25);
+            //Draw spaceship
+            SaxionApp.drawImage(spaceship.imageFile, spaceship.x, spaceship.y, 50, 50);
+            // Stop the spaceship after one move
+            spaceship.move = 0;
+
+            //Collision detection from asteroid to ship
+            for (int i = 0; i < asteroids.size(); i++) {
+                Asteroid asteroidCollision = asteroids.get(i);
+                if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
+                    lives = lives - 1;
+                    SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                    asteroids.remove(asteroidCollision);
+                }
             }
-        }
-        for (int i = 0; i < asteroidsFromBottom.size(); i++) {
-            Asteroid asteroidCollision = asteroidsFromBottom.get(i);
-            if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
-                lives = lives - 1;
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
-                asteroidsFromBottom.remove(asteroidCollision);
+            for (int i = 0; i < asteroidsFromBottom.size(); i++) {
+                Asteroid asteroidCollision = asteroidsFromBottom.get(i);
+                if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
+                    lives = lives - 1;
+                    SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                    asteroidsFromBottom.remove(asteroidCollision);
+                }
             }
-        }
-        for (int i = 0; i < asteroidsFromLeft.size(); i++) {
-            Asteroid asteroidCollision = asteroidsFromLeft.get(i);
-            if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
-                lives = lives - 1;
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
-                asteroidsFromLeft.remove(asteroidCollision);
+            for (int i = 0; i < asteroidsFromLeft.size(); i++) {
+                Asteroid asteroidCollision = asteroidsFromLeft.get(i);
+                if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
+                    lives = lives - 1;
+                    SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                    asteroidsFromLeft.remove(asteroidCollision);
+                }
             }
-        }
-        for (int i = 0; i < asteroidsFromRight.size(); i++) {
-            Asteroid asteroidCollision = asteroidsFromRight.get(i);
-            if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
-                lives = lives - 1;
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
-                asteroidsFromRight.remove(asteroidCollision);
+            for (int i = 0; i < asteroidsFromRight.size(); i++) {
+                Asteroid asteroidCollision = asteroidsFromRight.get(i);
+                if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
+                    lives = lives - 1;
+                    SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                    asteroidsFromRight.remove(asteroidCollision);
+                }
             }
-        }
 
             //Deletes asteroids from top from array when they leave the screen bounds
             for (int j = 0; j < asteroids.size(); j++) {
@@ -160,28 +172,28 @@ public class BasicGame implements GameLoop {
                     asteroids.remove(asteroid);
                 }
             }
-                for (int k = 0; k < asteroidsFromBottom.size(); k++) {
-                    Asteroid asteroid = asteroidsFromBottom.get(k);
-                    // change variables to adjust when asteroids get deleted from array
-                    if (asteroid.x < 0 || asteroid.y < 0) {
-                        asteroidsFromBottom.remove(asteroid);
-                    }
-                }
-                for (int y = 0; y < asteroidsFromRight.size(); y++) {
-                    Asteroid asteroid = asteroidsFromRight.get(y);
-                    // change variables to adjust when asteroids get deleted from array
-                    if (asteroid.x < screenWidth || asteroid.y < 0) {
-                        asteroidsFromRight.remove(asteroid);
-                    }
-                }
-                for (int x = 0; x < asteroidsFromLeft.size(); x++) {
-                    Asteroid asteroid = asteroidsFromLeft.get(x);
-                    // change variables to adjust when asteroids get deleted from array
-                    if (asteroid.x > screenWidth || asteroid.y > screenHeight || asteroid.y < 0) {
-                        asteroidsFromLeft.remove(asteroid);
-                    }
+            for (int k = 0; k < asteroidsFromBottom.size(); k++) {
+                Asteroid asteroid = asteroidsFromBottom.get(k);
+                // change variables to adjust when asteroids get deleted from array
+                if (asteroid.x < 0 || asteroid.y < 0) {
+                    asteroidsFromBottom.remove(asteroid);
                 }
             }
+            for (int y = 0; y < asteroidsFromRight.size(); y++) {
+                Asteroid asteroid = asteroidsFromRight.get(y);
+                // change variables to adjust when asteroids get deleted from array
+                if (asteroid.x < screenWidth || asteroid.y < 0) {
+                    asteroidsFromRight.remove(asteroid);
+                }
+            }
+            for (int x = 0; x < asteroidsFromLeft.size(); x++) {
+                Asteroid asteroid = asteroidsFromLeft.get(x);
+                // change variables to adjust when asteroids get deleted from array
+                if (asteroid.x > screenWidth || asteroid.y > screenHeight || asteroid.y < 0) {
+                    asteroidsFromLeft.remove(asteroid);
+                }
+            }
+        }
 
 
 
@@ -197,8 +209,18 @@ public class BasicGame implements GameLoop {
                 // rotation to right side
                 spaceship.a=spaceship.a+10;
             }
-            if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_UP){
-                spaceship.move =spaceship.move+15;
+            if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_UP) {
+                spaceship.move = spaceship.move + 15;
+            }
+
+
+                if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_SPACE) {
+                    Laser bullets = new Laser();
+                    bullets.x = spaceship.x;
+                    bullets.y = spaceship.y;
+                    bullets.a = spaceship.a;
+                    bullets.move = spaceship.move+20 ;
+                    shootLaser.add(bullets);
 
             }
             if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_0){
