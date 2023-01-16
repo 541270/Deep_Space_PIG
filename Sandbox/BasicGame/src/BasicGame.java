@@ -97,24 +97,26 @@ public class BasicGame implements GameLoop {
             asteroidR.boundingBox.x = asteroidR.x;
             asteroidR.boundingBox.y = asteroidR.y;
         }
-        if (spaceship.x >= 850) {
-            spaceship.x = 850;
+        if (spaceship.x >= screenSize.width-100) {
+            spaceship.x = screenSize.width-100;
         }
-        if (spaceship.x <= 0) {
+        if (spaceship.x <=0) {
             spaceship.x = 0;
         }
-        if (spaceship.y >= 530) {
-            spaceship.y = 530;
+        if (spaceship.y >= screenSize.height-150) {
+            spaceship.y = screenSize.height-150;
         }
         if (spaceship.y <= 0) {
             spaceship.y = 0;
         }
 
         for (Laser shoots : shootLaser) {
+
             shoots.x += Math.cos(Math.toRadians(shoots.a)) * shoots.move;
             shoots.y += Math.sin(Math.toRadians(shoots.a)) * shoots.move;
             // Rotate laser with spaceship
             SaxionApp.transformRotate(shoots.a, shoots.x + 25, shoots.y + 25);
+
             SaxionApp.drawImage("Sandbox/BasicGame/src/Images/bluelaser.png", shoots.x, shoots.y, 50, 50);
         }
 
@@ -215,6 +217,7 @@ public class BasicGame implements GameLoop {
 
 
                 if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_SPACE) {
+
                     Laser bullets = new Laser();
                     bullets.x = spaceship.x;
                     bullets.y = spaceship.y;
