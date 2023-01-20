@@ -364,15 +364,15 @@ public class BasicGame implements GameLoop {
         SaxionApp.clear();
         SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
         SaxionApp.setTextDrawingColor(Color.WHITE);
-        SaxionApp.drawText("YOU DIED!", screenWidth/2 - 150, screenHeight/2 -50, 30);
-        SaxionApp.drawText("Your Score: " + score, 150, 150, 30);
+        SaxionApp.drawText("YOU DIED!", screenWidth/2 - 75, screenHeight/2 -50, 30);
+        SaxionApp.drawText("Your Score: " + score, screenWidth/2 - 100, screenHeight/2, 30);
         if(score > finalScore.get(0)) {
             finalScore.remove(0);
             finalScore.add(0, score);
         }
         int first = finalScore.get(0);
 
-        SaxionApp.drawText("Top Score: " + first, 150, 200, 30);
+        SaxionApp.drawText("Top Score: " + first, screenWidth/2 - 90, screenHeight/2+50, 30);
 
     }
 }
