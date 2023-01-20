@@ -226,6 +226,10 @@ public class BasicGame implements GameLoop {
     public void resetGame() {
         //Sound and Start screen
         SaxionApp.clear();
+        spawnTimer = 2000;
+        //Number of lives
+        score = 0;
+        lives=2;
         // initialize the player, laser and objects
         spaceship = new Ship();
         spaceship.x = screenWidth / 2;
