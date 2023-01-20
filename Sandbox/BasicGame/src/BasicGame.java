@@ -373,7 +373,7 @@ public class BasicGame implements GameLoop {
         int first = finalScore.get(0);
 
         SaxionApp.drawText("Top Score: " + first, screenWidth/2 - 90, screenHeight/2+50, 30);
-
+        SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 350, screenHeight -200, 30);
     }
 }
 
