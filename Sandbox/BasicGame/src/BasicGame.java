@@ -34,13 +34,14 @@ public class BasicGame implements GameLoop {
     //asteroid spawn rate
     int spawnTimer = 2000;
     //Number of lives
-    int lives = 10;
+    int lives;
     int score = 0;
 
 
     @Override
     public void init() {
         finalScore.add(0);
+        SaxionApp.setTextDrawingColor(Color.WHITE);
     }
 
     @Override
@@ -51,6 +52,8 @@ public class BasicGame implements GameLoop {
             game();
         } else if(currentScreen.equals("deathScreen")){
             deathScreen();
+        }else if(currentScreen.equals("leaderboard")){
+            leaderboard();
         }
     }
 
@@ -134,6 +137,7 @@ public class BasicGame implements GameLoop {
 
         if (lives <= 0) {
             currentScreen = "deathScreen";
+            playerAlive=false;
         }
 
     }
@@ -188,7 +192,7 @@ public class BasicGame implements GameLoop {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (playerAlive) {
+                if (lives>0) {
                     Asteroid asteroid = new Asteroid();
                     asteroid.x = SaxionApp.getRandomValueBetween(0, SaxionApp.getWidth());
                     asteroid.y = -50;
@@ -245,14 +249,16 @@ public class BasicGame implements GameLoop {
         //Number of lives
         score = 0;
         lives=2;
+        playerAlive = true;
         // initialize the player, laser and objects
         spaceship = new Ship();
         spaceship.x = screenWidth / 2;
         spaceship.y = screenHeight / 2;
         spaceship.a = 270;
         spaceship.move = 0;
-        spaceship.boundingBox = new Rectangle(spaceship.x + 5, spaceship.y + 5, 30, 30);
+        spaceship.boundingBox = new Rectangle(spaceship.x, spaceship.y, 30, 30);
         // Note: <Asteroid> replaced with <>
+
         asteroids = new ArrayList<>();
         asteroidsFromBottom = new ArrayList<>();
         asteroidsFromLeft = new ArrayList<>();
@@ -300,15 +306,13 @@ public class BasicGame implements GameLoop {
 
     }
 
-
-
     //Timer method to add lives to an array that will be used to draw image
     public void setLives(boolean playerAlive) {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (playerAlive) {
+                if (lives>0) {
                     Health setLives = new Health();
                     setLives.x = SaxionApp.getRandomValueBetween(0, SaxionApp.getWidth());
                     setLives.y = -50;
@@ -363,7 +367,6 @@ public class BasicGame implements GameLoop {
     public void deathScreen(){
         SaxionApp.clear();
         SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
-        SaxionApp.setTextDrawingColor(Color.WHITE);
         SaxionApp.drawText("YOU DIED!", screenWidth/2 - 75, screenHeight/2 -50, 30);
         SaxionApp.drawText("Your Score: " + score, screenWidth/2 - 100, screenHeight/2, 30);
         if(score > finalScore.get(0)) {
@@ -373,8 +376,16 @@ public class BasicGame implements GameLoop {
         int first = finalScore.get(0);
 
         SaxionApp.drawText("Top Score: " + first, screenWidth/2 - 90, screenHeight/2+50, 30);
-        SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 350, screenHeight -200, 30);
+        SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 225, screenHeight -200, 30);
     }
+    public void leaderboard(){
+        SaxionApp.clear();
+        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
+        SaxionApp.drawText("Top Score", screenWidth/2 - 80, screenHeight/2-50, 30);
+        SaxionApp.drawText(" "+finalScore.get(0), screenWidth/2 - 80, screenHeight/2, 30);
+        SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 225, screenHeight -200, 30);
+    }
+
 }
 
 
