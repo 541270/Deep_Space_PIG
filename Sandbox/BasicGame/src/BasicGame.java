@@ -19,8 +19,8 @@ public class BasicGame implements GameLoop {
     }
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenWidth = screenSize.width - 50;
-    int screenHeight = screenSize.height - 50;
+    int screenWidth = screenSize.width;
+    int screenHeight = screenSize.height - 100;
     String currentScreen = "menu";
     Ship spaceship;
     ArrayList<Laser> shootLaser;
@@ -29,7 +29,6 @@ public class BasicGame implements GameLoop {
     ArrayList<Asteroid> asteroidsFromLeft;
     ArrayList<Asteroid> asteroidsFromRight;
     ArrayList<Health> healthSpawn;
-    ArrayList<Integer> finalScore = new ArrayList<>();
     boolean playerAlive = true;
     //asteroid spawn rate
     int spawnTimer = 2000;
@@ -37,20 +36,17 @@ public class BasicGame implements GameLoop {
     int lives = 10;
     int score = 0;
 
-
     @Override
     public void init() {
-        finalScore.add(0);
+
     }
 
     @Override
     public void loop() {
         if (currentScreen.equals("menu")) {
             menu();
-        }else if (currentScreen.equals("game")){
+        } else {
             game();
-        } else if(currentScreen.equals("deathScreen")){
-            deathScreen();
         }
     }
 
@@ -130,10 +126,8 @@ public class BasicGame implements GameLoop {
         asteroidCollision(asteroidsFromLeft);
         asteroidCollision(asteroidsFromRight);
 
-        laserOutOfBounds(shootLaser);
-
         if (lives <= 0) {
-            currentScreen = "deathScreen";
+            currentScreen = "menu";
         }
 
     }
@@ -171,9 +165,6 @@ public class BasicGame implements GameLoop {
             }
             if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_0) {
                 SaxionApp.quit();
-            }
-            if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_ESCAPE){
-                currentScreen = "menu";
             }
         }
     }
@@ -224,16 +215,10 @@ public class BasicGame implements GameLoop {
         if (keyboardEvent.isKeyPressed()) {
             if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_1) {
                 resetGame();
-                currentScreen = "game";
+                currentScreen = "game_screen";
             }
             if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_0) {
                 SaxionApp.quit();
-            }
-            if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_2){
-                currentScreen = "leaderboard";
-            }
-            if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_ESCAPE){
-                currentScreen = "menu";
             }
         }
     }
@@ -260,9 +245,8 @@ public class BasicGame implements GameLoop {
         setAsteroids(playerAlive, spawnTimer);
 
         healthSpawn = new ArrayList<>();
-        setLives(playerAlive);
+        setLives(playerAlive, spawnTimer + 20000);
         shootLaser = new ArrayList<>();
-
     }
 
     //Detects asteroids collision with spaceship and removes asteroid
@@ -287,9 +271,9 @@ public class BasicGame implements GameLoop {
             // Rotate laser with spaceship
             SaxionApp.transformRotate(shoots.a, shoots.x + 25, shoots.y + 25);
             SaxionApp.drawImage("Sandbox/BasicGame/src/Images/bluelaser.png", shoots.x, shoots.y, 50, 50);
-            Asteroid asteroidCollision;
+
             for (int i = 0; i < asteroids.size(); i++) {
-                asteroidCollision = asteroids.get(i);
+                Asteroid asteroidCollision = asteroids.get(i);
                 if (shoots.boundingBox.intersects(asteroidCollision.boundingBox)) {
                     score = score + 50;
                     SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", shoots.x, shoots.y, 50, 50);
@@ -297,13 +281,10 @@ public class BasicGame implements GameLoop {
                 }
             }
         }
-
     }
 
-
-
     //Timer method to add lives to an array that will be used to draw image
-    public void setLives(boolean playerAlive) {
+    public void setLives(boolean playerAlive, int spawnTimer) {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -317,9 +298,8 @@ public class BasicGame implements GameLoop {
                 }
             }
         };
-        int randomSpawn = SaxionApp.getRandomValueBetween(20000, 120000);
         //Edit spawnTimer period to change how fast asteroids spawn
-        timer.scheduleAtFixedRate(task, 0, randomSpawn);
+        timer.scheduleAtFixedRate(task, 0, spawnTimer);
     }
 
     //Deletes asteroids chosen from array when they leave the screen bounds, x & y are the screen bounds
@@ -348,32 +328,6 @@ public class BasicGame implements GameLoop {
             asteroid1.boundingBox.x = asteroid1.x;
             asteroid1.boundingBox.y = asteroid1.y;
         }
-    }
-
-    public void laserOutOfBounds(ArrayList<Laser> a) {
-        for (int i = 0; i < a.size(); i++) {
-            Laser laser = a.get(i);
-            // change variables to adjust when asteroids get deleted from array
-            if (laser.x < 0 || laser.x > screenWidth || laser.y < 0 || laser.y > screenHeight) {
-                a.remove(laser);
-            }
-        }
-    }
-
-    public void deathScreen(){
-        SaxionApp.clear();
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
-        SaxionApp.setTextDrawingColor(Color.WHITE);
-        SaxionApp.drawText("YOU DIED!", screenWidth/2 - 75, screenHeight/2 -50, 30);
-        SaxionApp.drawText("Your Score: " + score, screenWidth/2 - 100, screenHeight/2, 30);
-        if(score > finalScore.get(0)) {
-            finalScore.remove(0);
-            finalScore.add(0, score);
-        }
-        int first = finalScore.get(0);
-
-        SaxionApp.drawText("Top Score: " + first, screenWidth/2 - 90, screenHeight/2+50, 30);
-        SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 350, screenHeight -200, 30);
     }
 }
 
