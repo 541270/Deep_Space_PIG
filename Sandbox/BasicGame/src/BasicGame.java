@@ -104,6 +104,7 @@ public class BasicGame implements GameLoop {
             Health hearts = healthSpawn.get(i);
             if (spaceship.boundingBox.intersects(hearts.boundingBox)) {
                 lives = lives + 1;
+                SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
                 SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", hearts.x, hearts.y, 50, 50);
                 healthSpawn.remove(hearts);
             }
