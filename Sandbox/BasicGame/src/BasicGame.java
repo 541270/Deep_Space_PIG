@@ -56,12 +56,19 @@ public class BasicGame implements GameLoop {
         }else if(currentScreen.equals("leaderboard")){
             leaderboard();
         }
+        else if(currentScreen.equals("instruction")){
+            instruction();
+        }
     }
 
     public void menu() {
         SaxionApp.clear();
         //SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Destiny OST 26 Untold Legends.wav", true);
         SaxionApp.drawImage("Sandbox/BasicGame/src/Images/GameMenu.png", 0, 0, screenWidth, screenHeight);
+    }
+    public  void instruction(){
+        SaxionApp.clear();
+        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/Instruction.png",0,0,screenWidth,screenHeight);
     }
 
     public void game() {
@@ -257,8 +264,7 @@ public class BasicGame implements GameLoop {
                 currentScreen = "menu";
             }
             if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_3) {
-                SaxionApp.clear();
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/Instruction.png",0,0,screenWidth,screenHeight);
+                currentScreen = "instruction";
             }
         }
     }
