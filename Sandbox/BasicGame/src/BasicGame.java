@@ -152,6 +152,7 @@ public class BasicGame implements GameLoop {
         asteroidCollision(asteroidsFromRight);
         laserOutOfBounds(shootLaser);
         alienShipCollision(alienShip);
+        alienOutofBounds(alienShip);
         if (lives <= 0) {
             currentScreen = "deathScreen";
             playerAlive=false;
@@ -431,6 +432,15 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 225, screenHeight -200, 30);
     }
 
+    public void alienOutofBounds(ArrayList<Alien> alien){
+        for (int i = 0; i < alien.size(); i++) {
+            Alien alien1 = alien.get(i);
+            // change variables to adjust when asteroids get deleted from array
+            if (alien1.b > screenHeight) {
+                alien.remove(alien1);
+            }
+        }
+    }
 
 }
 
