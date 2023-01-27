@@ -256,6 +256,10 @@ public class BasicGame implements GameLoop {
             if(keyboardEvent.getKeyCode() == KeyboardEvent.VK_ESCAPE){
                 currentScreen = "menu";
             }
+            if (keyboardEvent.getKeyCode() == KeyboardEvent.VK_3) {
+                SaxionApp.clear();
+                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/Instruction.png",0,0,screenWidth,screenHeight);
+            }
         }
     }
 
