@@ -23,6 +23,7 @@ public class BasicGame implements GameLoop {
     int screenHeight = screenSize.height - 50;
     String currentScreen = "menu";
     Ship spaceship;
+    ArrayList<Alien> alienShip;
     ArrayList<Laser> shootLaser;
     ArrayList<Asteroid> asteroids;
     ArrayList<Asteroid> asteroidsFromBottom;
@@ -85,7 +86,13 @@ public class BasicGame implements GameLoop {
         drawAsteroid(asteroidsFromBottom, 2, -4);
         drawAsteroid(asteroidsFromLeft, 4,4);
         drawAsteroid(asteroidsFromRight, -4, -5);
-
+        //Draw alienShip
+        for(Alien alien : alienShip){
+            SaxionApp.drawImage(alien.imageFile,alien.a,alien.b,50,50);
+            alien.b = alien.b+5;
+            alien.boundingBox.x = alien.a;
+            alien.boundingBox.y = alien.b;
+        }
         //Asteroid out of bounds
         asteroidOutOfBounds(asteroids, screenWidth, screenHeight);
         asteroidOutOfBounds(asteroidsFromBottom, 0, -50);
@@ -99,15 +106,16 @@ public class BasicGame implements GameLoop {
             health.boundingBox.x = health.x;
             health.boundingBox.y = health.y;
         }
+
+
+
         //Collision detection between ship and hearts
         for (int i = 0; i < healthSpawn.size(); i++) {
             Health hearts = healthSpawn.get(i);
             if (spaceship.boundingBox.intersects(hearts.boundingBox)) {
                 lives = lives + 1;
-                //SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
-                //SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", hearts.x, hearts.y, 50, 50);
-                //here no need for explosion, will look for another sound
-                SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/health effect.wav");
+                SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
+                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", hearts.x, hearts.y, 50, 50);
                 healthSpawn.remove(hearts);
             }
         }
@@ -135,9 +143,8 @@ public class BasicGame implements GameLoop {
         asteroidCollision(asteroidsFromBottom);
         asteroidCollision(asteroidsFromLeft);
         asteroidCollision(asteroidsFromRight);
-
         laserOutOfBounds(shootLaser);
-
+        alienShipCollision(alienShip);
         if (lives <= 0) {
             currentScreen = "deathScreen";
             playerAlive=false;
@@ -220,6 +227,12 @@ public class BasicGame implements GameLoop {
                     asteroidR.y = SaxionApp.getRandomValueBetween(0, SaxionApp.getHeight());
                     asteroidR.boundingBox = new Rectangle(asteroidR.x, asteroidR.y, 45, 45);
                     asteroidsFromRight.add(asteroidR);
+
+                    Alien alien = new Alien();
+                    alien.a = SaxionApp.getRandomValueBetween(0,SaxionApp.getWidth());;
+                    alien.b = -50;
+                    alien.boundingBox= new Rectangle(alien.a,alien.b,50,50);
+                    alienShip.add(alien);
                 }
             }
         };
@@ -249,6 +262,7 @@ public class BasicGame implements GameLoop {
     public void resetGame() {
         //Sound and Start screen
         SaxionApp.clear();
+
         spawnTimer = 2000;
         //Number of lives
         score = 0;
@@ -268,7 +282,7 @@ public class BasicGame implements GameLoop {
         asteroidsFromLeft = new ArrayList<>();
         asteroidsFromRight = new ArrayList<>();
         setAsteroids(playerAlive, spawnTimer);
-
+        alienShip = new ArrayList<>();
         healthSpawn = new ArrayList<>();
         setLives(playerAlive);
         shootLaser = new ArrayList<>();
@@ -287,6 +301,19 @@ public class BasicGame implements GameLoop {
             }
         }
     }
+
+    public void alienShipCollision(ArrayList<Alien> alien) {
+        for (int i = 0; i < alienShip.size(); i++) {
+            Alien alienShipCollision = alien.get(i);
+            if (spaceship.boundingBox.intersects(alienShipCollision.boundingBox)) {
+                lives = lives - 1;
+                SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
+                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                alien.remove(alienShipCollision);
+            }
+        }
+    }
+
 
     //Collision detection between laser and asteroids, will remove image when hit
     public void laserShootDestroy(ArrayList<Asteroid> asteroids) {
@@ -325,6 +352,7 @@ public class BasicGame implements GameLoop {
                     setLives.boundingBox = new Rectangle(setLives.x, setLives.y, 45, 54);
                     healthSpawn.add(setLives);
                 }
+
             }
         };
         int randomSpawn = SaxionApp.getRandomValueBetween(20000, 120000);
@@ -360,6 +388,7 @@ public class BasicGame implements GameLoop {
         }
     }
 
+
     public void laserOutOfBounds(ArrayList<Laser> a) {
         for (int i = 0; i < a.size(); i++) {
             Laser laser = a.get(i);
@@ -391,6 +420,7 @@ public class BasicGame implements GameLoop {
         SaxionApp.drawText(" "+finalScore.get(0), screenWidth/2 - 80, screenHeight/2, 30);
         SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 225, screenHeight -200, 30);
     }
+
 
 }
 

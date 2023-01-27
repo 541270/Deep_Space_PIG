@@ -5,6 +5,7 @@ public class Laser {
     int y = 0;
     double a;
     double move;
+
     String laserImage = "Sandbox/Sandbox/resources/Images/bluelaser.png";
     Rectangle boundingBox;
 }
