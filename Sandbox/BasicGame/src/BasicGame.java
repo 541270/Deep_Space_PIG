@@ -37,6 +37,12 @@ public class BasicGame implements GameLoop {
     //Number of lives
     int lives;
     int score = 0;
+    String backgroundImage = "Sandbox/BasicGame/src/Images/background.png";
+    String gameMenuImage = "Sandbox/BasicGame/src/Images/GameMenu.png";
+    String instructionsImage = "Sandbox/BasicGame/src/Images/Instruction.png";
+    String explosionImage = "Sandbox/BasicGame/src/Images/explosion.png";
+    String laserImage = "Sandbox/BasicGame/src/Images/bluelaser.png";
+
 
 
     @Override
@@ -64,16 +70,16 @@ public class BasicGame implements GameLoop {
     public void menu() {
         SaxionApp.clear();
         //SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Destiny OST 26 Untold Legends.wav", true);
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/GameMenu.png", 0, 0, screenWidth, screenHeight);
+        SaxionApp.drawImage(gameMenuImage, 0, 0, screenWidth, screenHeight);
     }
     public  void instruction(){
         SaxionApp.clear();
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/Instruction.png",0,0,screenWidth,screenHeight);
+        SaxionApp.drawImage(instructionsImage,0,0,screenWidth,screenHeight);
     }
 
     public void game() {
         SaxionApp.clear();
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
+        SaxionApp.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight);
         SaxionApp.drawText("Lives: " + lives, 50, 50, 30);
         SaxionApp.drawText("Score: " + score, screenWidth - 250, 50, 30);
 
@@ -122,7 +128,7 @@ public class BasicGame implements GameLoop {
             if (spaceship.boundingBox.intersects(hearts.boundingBox)) {
                 lives = lives + 1;
                 SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", hearts.x, hearts.y, 50, 50);
+                SaxionApp.drawImage(explosionImage, hearts.x, hearts.y, 50, 50);
                 healthSpawn.remove(hearts);
             }
         }
@@ -307,7 +313,7 @@ public class BasicGame implements GameLoop {
             if (spaceship.boundingBox.intersects(asteroidCollision.boundingBox)) {
                 lives = lives - 1;
                 SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                SaxionApp.drawImage(explosionImage, spaceship.x, spaceship.y, 50, 50);
                 asteroids.remove(asteroidCollision);
             }
         }
@@ -319,7 +325,7 @@ public class BasicGame implements GameLoop {
             if (spaceship.boundingBox.intersects(alienShipCollision.boundingBox)) {
                 lives = lives - 1;
                 SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
-                SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", spaceship.x, spaceship.y, 50, 50);
+                SaxionApp.drawImage(explosionImage, spaceship.x, spaceship.y, 50, 50);
                 alien.remove(alienShipCollision);
             }
         }
@@ -335,14 +341,14 @@ public class BasicGame implements GameLoop {
             shoots.boundingBox.y = shoots.y;
             // Rotate laser with spaceship
             SaxionApp.transformRotate(shoots.a, shoots.x + 25, shoots.y + 25);
-            SaxionApp.drawImage("Sandbox/BasicGame/src/Images/bluelaser.png", shoots.x, shoots.y, 50, 50);
+            SaxionApp.drawImage(laserImage, shoots.x, shoots.y, 50, 50);
             Asteroid asteroidCollision;
             for (int i = 0; i < asteroids.size(); i++) {
                 asteroidCollision = asteroids.get(i);
                 if (shoots.boundingBox.intersects(asteroidCollision.boundingBox)) {
                     score = score + 50;
                     SaxionApp.playSound("Sandbox/BasicGame/src/Sounds/Explosion Sound Effect.wav");
-                    SaxionApp.drawImage("Sandbox/BasicGame/src/Images/explosion.png", shoots.x, shoots.y, 50, 50);
+                    SaxionApp.drawImage(explosionImage, shoots.x, shoots.y, 50, 50);
                     asteroids.remove(asteroidCollision);
                 }
             }
@@ -412,7 +418,7 @@ public class BasicGame implements GameLoop {
 
     public void deathScreen(){
         SaxionApp.clear();
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
+        SaxionApp.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight);
         SaxionApp.drawText("GAME OVER!", screenWidth/2 - 75, screenHeight/2 -50, 30);
         SaxionApp.drawText("Your Score: " + score, screenWidth/2 - 100, screenHeight/2, 30);
         if(score > finalScore.get(0)) {
@@ -426,7 +432,7 @@ public class BasicGame implements GameLoop {
     }
     public void leaderboard(){
         SaxionApp.clear();
-        SaxionApp.drawImage("Sandbox/BasicGame/src/Images/background.png", 0, 0, screenWidth, screenHeight);
+        SaxionApp.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight);
         SaxionApp.drawText("Top Score", screenWidth/2 - 80, screenHeight/2-50, 30);
         SaxionApp.drawText(" "+finalScore.get(0), screenWidth/2 - 80, screenHeight/2, 30);
         SaxionApp.drawText("Press ESC to return to main menu", screenWidth/2 - 225, screenHeight -200, 30);

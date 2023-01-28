@@ -1,0 +1,13 @@
+//READ ME
+For the project to run successfully the user will have to install a Java SDK (we use Java 17 SDK) which can be found
+at the following link: https://download.oracle.com/java/17/archive/jdk-17.0.6_windows-x64_bin.exe
+
+Occasionally, when the game needs to run on a new dev environment, the project will throw an error that the program
+failed to run due the filenames. To solve this please edit the image variables at the start of the BasicGame class
+and possibly the image file names inside each of the other classes.
+
+Since we collaborated on GitHub, we have made the project visible to the public. If you wish to see the group commits
+please follow the link: https://github.com/541270/Deep_Space_PIG/settings
+
+Thank you and we hope you enjoy the game.
+
